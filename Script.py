@@ -114,7 +114,7 @@ fa.close()
 #setup ftp
 os.system("sudo apt-get install vsftpd")
 os.system("sudo pwconv")
-os.system("sudo bash pwd.sh")
+os.system("sudo bash /home/ubuntu/myPython/pwd.sh")
 f=open('/etc/vsftpd.conf','r+')
 flist=f.readlines()
 flist[30]="write_enable=YES\n"
