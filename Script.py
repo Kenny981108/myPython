@@ -126,7 +126,7 @@ os.system("sudo service vsftpd start")
 #setup net2ftp
 os.system("sudo wget http://www.net2ftp.com/download/net2ftp_v1.3.zip")
 os.system("sudo apt install ubzip")
-so.system("sudo unzip net2ftp_v1.3.zip -d /var/www/html")
+os.system("sudo unzip net2ftp_v1.3.zip -d /var/www/html")
 
 
 
