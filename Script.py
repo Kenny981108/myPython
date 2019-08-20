@@ -115,6 +115,18 @@ fa.close()
 os.system("sudo apt-get install vsftpd")
 os.system("sudo pwconv")
 os.system("sudo bash pwd.sh")
+f=open('/etc/vsftpd.conf','r+')
+flist=f.readlines()
+flist[30]="write_enable=YES\n"
+flist[34]="local_umask=022\n"
+flist[113]="chroot_local_user=YES\n"
+f=open('/etc/vsftpd.conf','w+')
+f.writelines(flist)
+os.system("sudo service vsftpd start")
+#setup net2ftp
+os.system("sudo wget http://www.net2ftp.com/download/net2ftp_v1.3.zip")
+os.system("sudo apt install ubzip")
+so.system("sudo unzip net2ftp_v1.3.zip -d /var/www/html")
 
 
 
