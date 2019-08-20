@@ -113,7 +113,9 @@ fa.close()
 
 #setup ftp
 os.system("sudo apt-get install vsftpd")
+os.system("sudo wget http://www.net2ftp.com/download/net2ftp_v1.3.zip")
 os.system("sudo pwconv")
+os.system("sudo useradd -m student")
 os.system("sudo bash /home/ubuntu/myPython/pwd.sh")
 f=open('/etc/vsftpd.conf','r+')
 flist=f.readlines()
@@ -124,7 +126,7 @@ f=open('/etc/vsftpd.conf','w+')
 f.writelines(flist)
 os.system("sudo service vsftpd start")
 #setup net2ftp
-os.system("sudo wget http://www.net2ftp.com/download/net2ftp_v1.3.zip")
+
 os.system("sudo apt install unzip")
 os.system("sudo unzip net2ftp_v1.3.zip -d /var/www/html")
 
