@@ -5,7 +5,7 @@ os.system("sudo apt-get update")
 os.system("sudo bash myPython/mysql.sh")
 
 os.system("sudo apt -y install apache2 php7.2 libapache2-mod-php")
-os.system("sudo apt -y install graphviz aspell ghostscript clamav php7.2-pspell php7.2-curl php7.2-gd php7.2-intl php7.2-mysql php7.2-xml php7.2-xmlrpc php7.2-ldap php7.2-zip php7.2-soap php7.2-mbstring")
+os.system("sudo apt -y install graphviz aspell ghostscript clamav php7.2-pspell php7.2-bcmath php7.2-curl php7.2-gd php7.2-intl php7.2-mysql php7.2-xml php7.2-xmlrpc php7.2-ldap php7.2-zip php7.2-soap php7.2-mbstring")
 os.system("sudo service apache2 restart")
 os.system("sudo apt -y install git")
 os.system("sudo apt -y install python3-mysqldb")
