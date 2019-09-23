@@ -121,15 +121,29 @@ load_tip = "系统负载（三个数值中有一个超过3就是高）："+str(l
 print(load_tip)
 
 
-if disk_usage >= 0:
-    send_mail("'This virtual machine has an alarm about disk usage, please check it soon. The disk uasge is', disk_tip")
-elif disk_usage >= 0:
+if disk_usage >= 0 and mem_usage >= 0 and cpu_usage >= 0:
+    send_mail("'This virtual machine has an alarm about disk usage, please check it soon. The disk uasge is', disk_tip,"
+              "'\nThis virtual machine has an alarm about CPU usage, please check it soon. The CPU uasge is', CPU_tip,"
+             "'\nThis virtual machine has an alarm about Mem usage, please check it soon. The Mem uasge is', mem_tip")
+elif disk_usage < 0 and mem_usage < 0 and cpu_usage >= 0:
     send_mail("'This virtual machine has an alarm about CPU usage, please check it soon. The CPU uasge is', CPU_tip")
-elif disk_usage >= 0:
+elif disk_usage < 0 and mem_usage >= 0 and cpu_usage < 0:
     send_mail("'This virtual machine has an alarm about Mem usage, please check it soon. The Mem uasge is', mem_tip")
+elif disk_usage >= 0 and mem_usage < 0 and cpu_usage < 0:
+    send_mail("'This virtual machine has an alarm about disk usage, please check it soon. The disk uasge is', disk_tip")
+elif disk_usage >= 0 and mem_usage < 0 and cpu_usage >= 0:
+    send_mail("'This virtual machine has an alarm about disk usage, please check it soon. The disk uasge is', disk_tip,"
+              "'\nThis virtual machine has an alarm about CPU usage, please check it soon. The CPU uasge is', CPU_tip,")
+elif disk_usage >= 0 and mem_usage >= 0 and cpu_usage < 0:
+    send_mail("'This virtual machine has an alarm about disk usage, please check it soon. The disk uasge is', disk_tip,"
+             "'\nThis virtual machine has an alarm about Mem usage, please check it soon. The Mem uasge is', mem_tip")
+elif disk_usage < 0 and mem_usage >= 0 and cpu_usage >= 0:
+    send_mail("'\nThis virtual machine has an alarm about CPU usage, please check it soon. The CPU uasge is', CPU_tip,"
+             "'\nThis virtual machine has an alarm about Mem usage, please check it soon. The Mem uasge is', mem_tip")
 
 for i in range(3):
     if laod_usage[i] >= 0:
-        send_mail("'This virtual machine has an alarm about load average, please check it soon. The load average is', load_usage[i]")
+        send_mail("'This virtual machine has an alarm about load average, please check it soon. The load average is', load_tip")
+        break
     
 
