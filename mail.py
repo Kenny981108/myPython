@@ -122,28 +122,28 @@ print(load_tip)
 
 
 if disk_usage >= 0 and mem_usage >= 0 and cpu_usage >= 0:
-    send_mail('This virtual machine has an alarm about disk usage, please check it soon. The disk uasge is', disk_tip,
-              '\nThis virtual machine has an alarm about CPU usage, please check it soon. The CPU uasge is', cpu_tip,
-             '\nThis virtual machine has an alarm about Mem usage, please check it soon. The Mem uasge is', mem_tip)
+    send_mail('This virtual machine has an alarm about disk usage, please check it soon. The disk uasge is %s' 
+              '\nThis virtual machine has an alarm about CPU usage, please check it soon. The CPU uasge is %s' 
+              '\nThis virtual machine has an alarm about Mem usage, please check it soon. The Mem uasge is %s',%(disk_tip,cpu_tip,mem_tip))
 elif disk_usage < 0 and mem_usage < 0 and cpu_usage >= 0:
-    send_mail('This virtual machine has an alarm about CPU usage, please check it soon. The CPU uasge is', cpu_tip)
+    send_mail('This virtual machine has an alarm about CPU usage, please check it soon. The CPU uasge is %s', %(cpu_tip))
 elif disk_usage < 0 and mem_usage >= 0 and cpu_usage < 0:
-    send_mail('This virtual machine has an alarm about Mem usage, please check it soon. The Mem uasge is', mem_tip)
+    send_mail('This virtual machine has an alarm about Mem usage, please check it soon. The Mem uasge is %s', %(mem_tip))
 elif disk_usage >= 0 and mem_usage < 0 and cpu_usage < 0:
-    send_mail('This virtual machine has an alarm about disk usage, please check it soon. The disk uasge is', disk_tip)
+    send_mail('This virtual machine has an alarm about disk usage, please check it soon. The disk uasge is %s', %(disk_tip))
 elif disk_usage >= 0 and mem_usage < 0 and cpu_usage >= 0:
-    send_mail('This virtual machine has an alarm about disk usage, please check it soon. The disk uasge is', disk_tip,
-              '\nThis virtual machine has an alarm about CPU usage, please check it soon. The CPU uasge is', cpu_tip)
+    send_mail('This virtual machine has an alarm about disk usage, please check it soon. The disk uasge is %s'
+              '\nThis virtual machine has an alarm about CPU usage, please check it soon. The CPU uasge is %s', %(disk_tip,cpu_tip))
 elif disk_usage >= 0 and mem_usage >= 0 and cpu_usage < 0:
-    send_mail('This virtual machine has an alarm about disk usage, please check it soon. The disk uasge is', disk_tip,
-             '\nThis virtual machine has an alarm about Mem usage, please check it soon. The Mem uasge is', mem_tip)
+    send_mail('This virtual machine has an alarm about disk usage, please check it soon. The disk uasge is %s'
+             '\nThis virtual machine has an alarm about Mem usage, please check it soon. The Mem uasge is %s', %(disk_tip,mem_tip))
 elif disk_usage < 0 and mem_usage >= 0 and cpu_usage >= 0:
-    send_mail('\nThis virtual machine has an alarm about CPU usage, please check it soon. The CPU uasge is', cpu_tip,
-             '\nThis virtual machine has an alarm about Mem usage, please check it soon. The Mem uasge is', mem_tip)
+    send_mail('\nThis virtual machine has an alarm about CPU usage, please check it soon. The CPU uasge is %s'
+             '\nThis virtual machine has an alarm about Mem usage, please check it soon. The Mem uasge is %s', %(cpu_tip,mem_tip))
 
 for i in range(3):
     if load_usage[i] >= 0:
-        send_mail('This virtual machine has an alarm about load average, please check it soon. The load average is', load_tip)
+        send_mail('This virtual machine has an alarm about load average, please check it soon. The load average is %s', %(load_tip))
         break
     
 
