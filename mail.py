@@ -104,20 +104,20 @@ total_disk_space = statvfs.f_frsize * statvfs.f_blocks
 free_disk_space = statvfs.f_frsize * statvfs.f_bfree
 disk_usage = (total_disk_space - free_disk_space) * 100.0 / total_disk_space
 disk_usage = int(disk_usage)
-disk_tip = "硬盘空间使用率（最大100%）："+str(disk_usage)+"%"
+disk_tip = "Hard disk space usage (up to 100%):："+str(disk_usage)+"%"
 print(disk_tip)
 
 mem_usage = get_mem_usage_percent()
 mem_usage = int(mem_usage[0])
-mem_tip = "物理内存使用率（最大100%）："+str(mem_usage)+"%"
+mem_tip = "Physical memory usage (up to 100%)："+str(mem_usage)+"%"
 print(mem_tip)
 
 cpu_usage = int(get_cpu()*100)
-cpu_tip = "CPU使用率（最大100%）："+str(cpu_usage)+"%"
+cpu_tip = "CPU usage (up to 100%)："+str(cpu_usage)+"%"
 print(cpu_tip)
 
 load_average = os.getloadavg()
-load_tip = "系统负载（三个数值中有一个超过3就是高）："+str(load_average)
+load_tip = "Load average："+str(load_average)
 print(load_tip)
 
 
@@ -142,8 +142,8 @@ elif disk_usage < 0 and mem_usage >= 0 and cpu_usage >= 0:
              '\nThis virtual machine has an alarm about Mem usage, please check it soon. The Mem uasge is %s'%(cpu_tip,mem_tip))
 
 for i in range(3):
-    if load_usage[i] >= 0:
-        send_mail('This virtual machine has an alarm about load average, please check it soon. The load average is %s'%(load_tip))
+    if load_average[i] >= 0:
+        send_mail('This virtual machine has an alarm about load average, please check it soon. The load average is %s'%(load_average))
         break
     
 
