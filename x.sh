@@ -1,72 +1,81 @@
-#!/bin/bash
+#!/usr/bin/env python
+# -*- coding:utf-8 -*- 
+#Author: nulige
 
-MAILLIST="xxxxx@xxx.cn"    #emailist
+import os, time
 
-MEM_CORDON=100   #内存使用大于这个值报警
-SWAP_CORDON=50  #交换区使用值大于这个报警  
-CPU_CORDON=5    #cpu空闲小于这个值报警
-DISK_CORDON=85  #磁盘占用大于这个值报警
-HOSTNAME=`hostname`
-DATA=`date`
+last_worktime=0
+last_idletime=0
 
-send_warning()
-{
-    echo $MESSAGE | mutt -s "$TITLE" "$MAILLIST"
-}
+def get_cpu():
+        global last_worktime, last_idletime
+        f=open("/proc/stat","r")
+        line=""
+        while not "cpu " in line: line=f.readline()
+        f.close()
+        spl=line.split(" ")
+        worktime=int(spl[2])+int(spl[3])+int(spl[4])
+        idletime=int(spl[5])
+        dworktime=(worktime-last_worktime)
+        didletime=(idletime-last_idletime)
+        rate=float(dworktime)/(didletime+dworktime)
+        last_worktime=worktime
+        last_idletime=idletime
+        if(last_worktime==0): return 0
+        return rate
 
-if [ $# -ne 0 ];then
-    DISK_DIR=$1
-else
-    DISK_DIR="/dev/sdb1"
-fi
+def get_mem_usage_percent():
+    try:
+        f = open('/proc/meminfo', 'r')
+        for line in f:
+            if line.startswith('MemTotal:'):
+                mem_total = int(line.split()[1])
+            elif line.startswith('MemFree:'):
+                mem_free = int(line.split()[1])
+            elif line.startswith('Buffers:'):
+                mem_buffer = int(line.split()[1])
+            elif line.startswith('Cached:'):
+                mem_cache = int(line.split()[1])
+            elif line.startswith('SwapTotal:'):
+                vmem_total = int(line.split()[1])
+            elif line.startswith('SwapFree:'):
+                vmem_free = int(line.split()[1])
+            else:
+                continue
+        f.close()
+    except:
+        return None
+    physical_percent = usage_percent(mem_total - (mem_free + mem_buffer + mem_cache), mem_total)
+    virtual_percent = 0
+    if vmem_total > 0:
+        virtual_percent = usage_percent((vmem_total - vmem_free), vmem_total)
+    return physical_percent, virtual_percent
 
-#MEM|SWAP check
-MEMSTATUS=`free | grep "Mem" | awk '{printf("%d", $3*100/$2)}'`
-SWAPSTATUS=`free | grep "Swap" | awk '{printf("%d", $3*100/$2)}'`
+def usage_percent(use, total):
+    try:
+        ret = (float(use) / total) * 100
+    except ZeroDivisionError:
+        raise Exception("ERROR - zero division error")
+    return ret
 
-if [ $MEMSTATUS -ge $MEM_CORDON ];then
-    TITLE="[bad_news]:$HOSTNAME mem usage"
-    MESSAGE="Time:${DATA},Mem_used:${MEMSTATUS}%,Swap_used:${SWAPSTATUS}%"
-    send_warning
-fi
+statvfs = os.statvfs('/')
 
-if [ $SWAPSTATUS -ge $SWAP_CORDON ];then
-    TITLE="[bad_news]:$HOSTNAME Swap usage"
-    MESSAGE="Time:${DATA},Mem_used:${MEMSTATUS}%,Swap_used:${SWAPSTATUS}%"
-    send_warning
-fi   
+total_disk_space = statvfs.f_frsize * statvfs.f_blocks
+free_disk_space = statvfs.f_frsize * statvfs.f_bfree
+disk_usage = (total_disk_space - free_disk_space) * 100.0 / total_disk_space
+disk_usage = int(disk_usage)
+disk_tip = "硬盘空间使用率（最大100%）："+str(disk_usage)+"%"
+print(disk_tip)
 
-#cpu
+mem_usage = get_mem_usage_percent()
+mem_usage = int(mem_usage[0])
+mem_tip = "物理内存使用率（最大100%）："+str(mem_usage)+"%"
+print(mem_tip)
 
-CPUSTATUS=`vmstat | awk '{print $15}' | tail -1`
+cpu_usage = int(get_cpu()*100)
+cpu_tip = "CPU使用率（最大100%）："+str(cpu_usage)+"%"
+print(cpu_tip)
 
-if [ $CPUSTATUS -le $CPU_CORDON ];then
-    TITLE="[bad_news]:$HOSTNAME cpu usage"
-    MESSAGE="Time:${DATA},MCpu_free:${CPUSTATUS}%"
-fi
-
-#disk use n%
-
-DISKSTATUS=`df -h $DISK_DIR | awk '{print $5}' | tail -1 | tr -d %`
-
-if [ $DISKSTATUS -ge $DISK_CORDON ];then
-    TITLE="[bad_news]:$HOSTNAME disk usage"
-    MESSAGE="Time:${DATA},Disk_used:${DISKSTATUS}%"
-    send_warning
-fi
-
-httpdnum=`ps aux | grep 'httpd' | wc -l`  
-if [ $httpdnum -le 1 ]  
-then  
-    TITLE="[bad_news]:$HOSTNAME "
-    MESSAGE="Time:${DATA},apache prograss is ended"
-    send_warning
-fi  
-
-tomcatnum=`ps aux | grep 'tomcat' | wc -l`  
-if [ $tomcatnum -le 1 ]  
-then  
-    TITLE="[bad_news]:$HOSTNAME "
-    MESSAGE="Time:${DATA},tomcat prograss is ended"
-    send_warning
-fi   
+load_average = os.getloadavg()
+load_tip = "系统负载（三个数值中有一个超过3就是高）："+str(load_average)
+print(load_tip)
