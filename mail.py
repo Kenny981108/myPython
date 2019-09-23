@@ -82,15 +82,15 @@ import smtplib
 
 from email.mime.text import MIMEText
 
-if disk_tip >= 20:
+if disk_tip >= 0:
     send_mail("'This virtual machine has an alarm about disk usage, please check it soon. The disk uasge is', disk_tip")
-elif disk_tip >= 20:
+elif disk_tip >= 0:
     send_mail("'This virtual machine has an alarm about CPU usage, please check it soon. The CPU uasge is', CPU_tip")
-elif disk_tip >= 20:
+elif disk_tip >= 0:
     send_mail("'This virtual machine has an alarm about Mem usage, please check it soon. The Mem uasge is', mem_tip")
 
 for i in range(3):
-    if laod_tip[i] >= 3:
+    if laod_tip[i] >= 0:
         send_mail("'This virtual machine has an alarm about load average, please check it soon. The load average is', load_tip[i]")
     
 #设置服务器所需信息
