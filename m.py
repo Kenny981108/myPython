@@ -16,4 +16,7 @@ process.sendline("us-east-1")
 process.expect("Default output format [None]:")
 process.sendline("text")
 
-pexpect.run("aws sns create-topic --name my-topic")
+returns = pexpect.run("aws sns create-topic --name my-topic")
+fid = renturns[22:34]
+os.system("aws sns subscribe --topic-arn arn:aws:sns:us-east-1:111122223333:my-topic --protocol email --notification-endpoint 1090265975@qq.com")
+
