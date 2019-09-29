@@ -12,7 +12,7 @@ ec2id = ec2.read()
 ec2id = ec2id.strip('\n')
 fa = os.popen('test -f /home/ubuntu/myPython/%s.txt && echo "exist" || echo "Not exist"'%(ec2id))
 fa = fa.read()
-fa.strip()
+fa = fa.strip()
 if fa =="exist":
     print("well done")
 elif fa == "Not exist":
