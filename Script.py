@@ -1,4 +1,5 @@
 #!/user/bin/env python
+
 #setup the LAMP
 import os
 os.system("sudo apt-get update")
@@ -9,6 +10,7 @@ os.system("sudo apt -y install graphviz aspell ghostscript clamav php7.2-pspell 
 os.system("sudo service apache2 restart")
 os.system("sudo apt -y install git")
 os.system("sudo apt -y install python3-mysqldb")
+os.system("sudo apt-get -y install awscli")
 os.chdir("/opt")
 os.system("sudo git clone git://git.moodle.org/moodle.git")
 os.chdir("moodle")
@@ -49,11 +51,6 @@ db.close()
 os.chdir("/var/www/html/moodle")
 os.system("sudo touch config.php")
 #setup the config.php
-#import socket,struct,fcntl
-# def get_ip(ifname):#get ip address
-#     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-#     return socket.inet_ntoa(fcntl.ioctl(s.fileno(), 0x8915, struct.pack('256s', bytes(ifname[:15],'utf-8')))[20:24])
-# ownip = get_ip('eth0')
 p = os.popen("curl ifconfig.me")
 publicIP = p.read()
 f = open('/var/www/html/moodle/config.php','w')
@@ -125,27 +122,25 @@ flist[113]="chroot_local_user=YES\n"
 f=open('/etc/vsftpd.conf','w+')
 f.writelines(flist)
 os.system("sudo service vsftpd start")
-#setup net2ftp
 
+#setup net2ftp
 os.system("sudo apt install unzip")
 os.system("sudo unzip net2ftp_v1.3.zip -d /var/www/html")
 
 
-os.system("sudo apt-get -y install awscli")
-
-
-# os.system("aws sns create-topic --name my-topic")
-# p = os.popen("aws sns create-topic --name my-topic")
-# fid = p.read()
-# fid = fid[22:34]
-# ec2 = os.popen("ec2metadata --instance-id")
-# ec2id = ec2.read()
-# ec2id = ec2id.strip('\n')
-# os.system("aws sns subscribe --topic-arn arn:aws:sns:us-east-1:%s:my-topic --protocol email --notification-endpoint 1090265975@qq.com"%(fid))
-# os.system("aws cloudwatch put-metric-alarm --alarm-name cpu-mon --alarm-description 'Alarm when CPU exceeds 70%s' --metric-name CPUUtilization --namespace AWS/EC2 --statistic Average --period 300 --threshold 70 --comparison-operator GreaterThanThreshold --dimensions  Name=InstanceId,Value=%s --evaluation-periods 2 --alarm-actions arn:aws:sns:us-east-1:%s:my-topic  --unit Percent"%("%",ec2id,fid))
-# #print(ec2id)
-# os.system("aws cloudwatch put-metric-alarm --alarm-name ebs-mon --alarm-description 'Alarm when EBS volume exceeds 100MB throughput' --metric-name VolumeReadBytes --namespace AWS/EBS --statistic Average --period 300 --threshold 100000000 --comparison-operator GreaterThanThreshold --dimensions Name=VolumeId,Value=%s --evaluation-periods 3 --alarm-actions arn:aws:sns:us-east-1:%s:my-topic "%(ec2id,fid))
-# os.system("sudo touch /home/ubuntu/myPython/%s.txt"%(ec2id))  
+os.system("aws configure")
+os.system("aws sns create-topic --name my-topic")
+p = os.popen("aws sns create-topic --name my-topic")
+fid = p.read()
+fid = fid[22:34]
+ec2 = os.popen("ec2metadata --instance-id")
+ec2id = ec2.read()
+ec2id = ec2id.strip('\n')
+os.system("aws sns subscribe --topic-arn arn:aws:sns:us-east-1:%s:my-topic --protocol email --notification-endpoint 1090265975@qq.com"%(fid))
+os.system("aws cloudwatch put-metric-alarm --alarm-name cpu-mon --alarm-description 'Alarm when CPU exceeds 70%s' --metric-name CPUUtilization --namespace AWS/EC2 --statistic Average --period 300 --threshold 70 --comparison-operator GreaterThanThreshold --dimensions  Name=InstanceId,Value=%s --evaluation-periods 2 --alarm-actions arn:aws:sns:us-east-1:%s:my-topic  --unit Percent"%("%",ec2id,fid))
+#print(ec2id)
+os.system("aws cloudwatch put-metric-alarm --alarm-name ebs-mon --alarm-description 'Alarm when EBS volume exceeds 100MB throughput' --metric-name VolumeReadBytes --namespace AWS/EBS --statistic Average --period 300 --threshold 100000000 --comparison-operator GreaterThanThreshold --dimensions Name=VolumeId,Value=%s --evaluation-periods 3 --alarm-actions arn:aws:sns:us-east-1:%s:my-topic "%(ec2id,fid))
+os.system("sudo touch /home/ubuntu/myPython/%s.txt"%(ec2id))  
 
 
 
