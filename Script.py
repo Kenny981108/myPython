@@ -98,7 +98,7 @@ lines = []
 for line in file:            
     lines.append(line)
 file.close()
-lines.insert(14, '[Install]\nWantedBy=multi-user.target\nAlias=rc-local.service')
+lines.insert(24, '[Install]\nWantedBy=multi-user.target\nAlias=rc-local.service')
 s = ''.join(lines)
 file = open('/lib/systemd/system/rc.local.service', 'w+')
 file.write(s)
