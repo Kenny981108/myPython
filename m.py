@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 
 import os
-os.system("aws sns create-topic --name my-topic")
-p = os.popen("aws sns create-topic --name my-topic")
-fid = p.read()
-fid = fid[22:34]
+f=open('/home/ubuntu/myPython/topic.txt','r')
+fid=f.read()
 ec2 = os.popen("ec2metadata --instance-id")
 ec2id = ec2.read()
 ec2id = ec2id.strip('\n')
